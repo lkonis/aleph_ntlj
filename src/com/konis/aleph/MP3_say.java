@@ -63,7 +63,8 @@ public class MP3_say {
 
     // test client
     public static void main(String[] args) {
-        String filename = "/home/ubtosh/workspace/try_drag/sounds/app-14.mp3";//args[0];
+        String ud = System.getProperty("user.dir");
+        String filename = ud + "/src/data/sounds/effects/coins.mp3";//args[0];
         MP3_say mp3 = new MP3_say(filename);
         mp3.play();
 

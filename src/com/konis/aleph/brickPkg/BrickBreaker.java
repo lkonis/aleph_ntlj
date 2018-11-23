@@ -53,7 +53,7 @@ public class BrickBreaker extends JFrame{
 	}
 */
 	public BrickBreaker(String argin) {
-		int constd = Integer.parseInt(argin);
+		int ball_speed = Integer.parseInt(argin);
 		setName("mainAssChosFrame");
 		setTitle("Brick Breaker game");
 		setLayout(new BorderLayout());
@@ -71,7 +71,7 @@ public class BrickBreaker extends JFrame{
     	PaddleInitY = paddle.getY();
     	//creates an instance of the ball for the game
 //    	ball = Ball.getBall((int)(paddle.getX()+ PaddleWidth/2 - BallSize/2), paddle.getY() - BallSize);
-    	ball = Ball.getBall((int)(paddle.getX()+ PaddleWidth/2 - BallSize/2), paddle.getY() - BallSize, constd);
+    	ball = Ball.getBall((int)(paddle.getX()+ PaddleWidth/2 - BallSize/2), paddle.getY() - BallSize, ball_speed);
     	BallInitX = ball.getX();
     	BallInitY = ball.getY();
     	// fill bricks
@@ -118,7 +118,7 @@ public class BrickBreaker extends JFrame{
 	}
     public void fillBricks(double appletsize_width) {
     	//creates bricks and puts them in an array for the game
-    	int numberBricks=3;
+    	int numberBricks=30;
     	bricks = new Brick[numberBricks];
     	int totalWidth=0;
     	int etage=0;
@@ -151,10 +151,10 @@ public class BrickBreaker extends JFrame{
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String argin="5";
+		String ball_speed="10";
 		if (args.length>0)
-			argin = args[0];			
-		new BrickBreaker(argin);
+			ball_speed = args[0];
+		new BrickBreaker(ball_speed);
 	}
 
 	public void exit() {

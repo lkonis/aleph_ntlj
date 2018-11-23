@@ -50,7 +50,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.AbstractDocument;
 
+import com.konis.aleph.brickPkg.*;
 import com.konis.aleph.hebLetter.Vowel;
 
 
@@ -107,7 +109,8 @@ public class AlephFrame extends JFrame implements ActionListener {
     final int LEVEL1THRESH = how_many_questions*deltaScore*5;
     final int LEVEL2THRESH = LEVEL1THRESH + how_many_questions*deltaScore*10;
     final int LEVEL3THRESH = LEVEL2THRESH + how_many_questions*deltaScore*10;
-    final int BRICKGAMETHRESH = 100;
+    final int BRICKGAMETHRESH = LEVEL3THRESH + how_many_questions*deltaScore*10;
+
     int bbSpeed = 3; // BrickBreaker game initial speed
 
     // score visual effects
@@ -279,8 +282,9 @@ public class AlephFrame extends JFrame implements ActionListener {
             String bbStrSpeed = Integer.toString(bbSpeed);
             // call brick game with speed and number of bricks as parameters
             bbSpeed += 1;
-            ProcessBuilder pb = new ProcessBuilder("/usr/bin/java", "-jar", "/home/ubtosh/Downloads/bb.jar" , bbStrSpeed);
-            pb.directory(new File("/home/ubtosh/Downloads/"));
+            String fullClassName = BrickBreaker.class.getName();// TODO check out if this fix works (use class instead of jar)
+            ProcessBuilder pb = new ProcessBuilder("/usr/bin/java", "-cp", fullClassName, bbStrSpeed.toString());
+            //pb.directory(new File("/home/ubtosh/Downloads/"));
             try {
                 pb.start();
             } catch (IOException e) {
@@ -290,6 +294,7 @@ public class AlephFrame extends JFrame implements ActionListener {
 
             // TODO:			new BrickBreaker("10");
         }
+
         return medal;
     }
 
@@ -318,8 +323,8 @@ public class AlephFrame extends JFrame implements ActionListener {
         JMenu settingsMenu= new JMenu("הגדרות");
         menuBar.add(settingsMenu);
         // add sound toggle checkBox button and activate default value
-        JCheckBoxMenuItem soundToggle = new JCheckBoxMenuItem("צליל");
-        soundToggle.setSelected(true);
+        JCheckBoxMenuItem soundToggle = new JCheckBoxMenuItem("השתק צליל");
+        soundToggle.setSelected(false);
         // add sound mute to settings menu
         settingsMenu.add(soundToggle);
         // toggle false vowels option
@@ -1248,6 +1253,12 @@ public class AlephFrame extends JFrame implements ActionListener {
             System.out.println("(difficulty == Difficulty.HARD && levelScore > LEVEL3THRESH)");
             medal = addMedal(true);
         }
+        if (difficulty == Difficulty.HARDEST && levelScore >= BRICKGAMETHRESH)
+        {
+            difficulty = Difficulty.HARDEST;
+            System.out.println("(difficulty == Difficulty.HARDEST && levelScore > BRICKGAMETHRESH)");
+            medal = addMedal(true);
+        }
     }
 
     /**
@@ -1332,7 +1343,9 @@ public class AlephFrame extends JFrame implements ActionListener {
             }
             // sound of falling coins
             if (isSoundOn()) {
-                String path_to_effect = getResourcePath("/data/sounds/effects/");
+                //String path_to_effect = getResourcePath("/data/sounds/effects/");
+                String path_to_effect = System.getProperty("user.dir") + "/src/data/sounds/effects/";
+
                 MP3_say mp3 = new MP3_say(path_to_effect+"coins.mp3");
                 mp3.play();
             }
@@ -1429,7 +1442,7 @@ public class AlephFrame extends JFrame implements ActionListener {
         {
             if (respath.charAt(respath.length() - 1) == '/')
             {
-                log(respath.substring(0, respath.length() - 1));
+                log("ends with '/'" + respath.substring(0, respath.length() - 1));
             }
 
             String[] respaths = respath.split(":");

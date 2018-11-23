@@ -346,9 +346,9 @@ public class ControlPanel extends JPanel {
 			for(int i = 0; i < bricks.length; i++){
 				bricks[i].setHit(false);
 			}
-			String soundEffectPath = AlephFrame.getClassResourcePath("/data/sounds/effects/");
+			//String soundEffectPath = AlephFrame.getClassResourcePath("/data/sounds/effects/");
+			String soundEffectPath = System.getProperty("user.dir") + "/src/data/sounds/effects/";
 			soundEffectPath += "magic-chime-02";
-
 			new Wav_say(soundEffectPath+".wav");
 
 
